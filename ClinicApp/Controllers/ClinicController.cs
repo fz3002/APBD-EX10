@@ -21,4 +21,10 @@ public class ClinicController : ControllerBase
     {
         return Ok(await _service.AddPrescriptionAsync(prescriptionDot, cancellationToken));
     }
+
+    [HttpGet("patients/{idPatient:int}")]
+    public async Task<IActionResult> GetPatient(int idPatient, CancellationToken cancellationToken)
+    {
+        return Ok(await _service.GetPatient(idPatient, cancellationToken));
+    }
 }

@@ -24,6 +24,16 @@ public class PatientRepository : IPatientRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
+    public async Task<Patient?> GetPatientAsync(int idPatient, CancellationToken cancellationToken)
+    {
+        var context = _unitOfWork.GetDbContext();
+        return await context.Patients
+            .Where(p =>
+                p.IdPatient == idPatient)
+            .Select(p => p)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
     public async Task<int> CreatePatientAsync(int idPatient, string firstName, string lastName, DateTime birthdate, CancellationToken cancellationToken)
     {
         var patient = new Patient

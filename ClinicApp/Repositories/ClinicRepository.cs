@@ -1,4 +1,5 @@
 using ClinicApp.Context;
+using ClinicApp.DTO;
 using ClinicApp.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,5 +39,33 @@ public class ClinicRepository : IClinicRepository
     public async Task AddMedToPrescriptionAsync(PrescriptionMedicament prescriptionMedicament, CancellationToken cancellationToken)
     {
         await _unitOfWork.GetDbContext().PrescriptionMedicaments.AddAsync(prescriptionMedicament, cancellationToken);
+    }
+
+    public async Task<ICollection<Prescription>> GetPatientsPrescriptionsAsync(int IdPatient, CancellationToken cancellationToken)
+    {
+        var prescriptions = await _unitOfWork
+            .GetDbContext().Prescriptions
+            .Where(p => p.IdPatient == IdPatient)
+            .Select(p => p)
+            .ToListAsync(cancellationToken);
+
+        return prescriptions;
+    }
+
+    public async Task<ICollection<MedicamentResponseDTO>> GetMedicamentsForPrescriptionAsync(int IdPrescription, CancellationToken cancellationToken)
+    {
+        var meds = await _unitOfWork
+            .GetDbContext().PrescriptionMedicaments
+            .Where(mp => mp.IdPrescription == IdPrescription)
+            .Include(mp => mp.Medicament)
+            .Select(mp => new MedicamentResponseDTO(
+                mp.Medicament.IdMedicament,
+                mp.Medicament.Name,
+                mp.Dose,
+                mp.Medicament.Description
+            ))
+            .ToListAsync(cancellationToken);
+
+        return meds;
     }
 }

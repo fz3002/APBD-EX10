@@ -37,7 +37,7 @@ public class ClinicService : IClinicService
         }
         var patient = await _patientRepository.GetPatientAsync(prescriptionDot.Patient.IdPatient,
             prescriptionDot.Patient.FirstName, prescriptionDot.Patient.LastName, prescriptionDot.Patient.Birthdate, cancellationToken);
-        var idPatient = await EnsurePatientExists(patient, prescriptionDot.Patient, cancellationToken);
+        var idPatient = await EnsurePatientExistsIfNotCreate(patient, prescriptionDot.Patient, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
         var idPrescription = await _clinicRepository.CreatePrescriptionAsync(prescriptionDot.IdDoctor, idPatient,
             prescriptionDot.Date, prescriptionDot.DateDue, cancellationToken);
@@ -58,6 +58,29 @@ public class ClinicService : IClinicService
         return idPrescription;
     }
 
+    public async Task<PatientResponseDTO> GetPatient(int idPatient, CancellationToken cancellationToken)
+    {
+        var patient = await _patientRepository.GetPatientAsync(idPatient, cancellationToken);
+        EnsurePatientExists(patient, idPatient);
+        var prescriptions = await _clinicRepository.GetPatientsPrescriptionsAsync(patient.IdPatient, cancellationToken);
+        var prescriptionsResponse = new List<PrescriptionResponseDTO>();
+        foreach (var prescription in prescriptions)
+        {
+            var medicaments =
+                await _clinicRepository.GetMedicamentsForPrescriptionAsync(prescription.IdPrescription,
+                    cancellationToken);
+            var doctor = await _doctorRepository.GetDoctorAsync(prescription.IdDoctor, cancellationToken);
+            var doctorResponse = new DoctorResponseDTO(doctor.IdDoctor, doctor.FirstName);
+            var prescriptionResponse = new PrescriptionResponseDTO(prescription.IdPrescription, prescription.Date,
+                prescription.DateDue, medicaments, doctorResponse);
+            prescriptionsResponse.Add(prescriptionResponse);
+        }
+
+        var patientResponse = new PatientResponseDTO(patient.IdPatient, patient.FirstName, patient.LastName,
+            prescriptionsResponse);
+        return patientResponse;
+    }
+
     private static void EnsureDoctorExists(Doctor? doctor, int id)
     {
         if (doctor == null)
@@ -66,7 +89,7 @@ public class ClinicService : IClinicService
         }
     }
 
-    private async Task<int> EnsurePatientExists(Patient? patient, PatientDTO patientRequested, CancellationToken cancellationToken)
+    private async Task<int> EnsurePatientExistsIfNotCreate(Patient? patient, PatientDTO patientRequested, CancellationToken cancellationToken)
     {
         if (patient == null)
         {
@@ -75,6 +98,14 @@ public class ClinicService : IClinicService
         }
 
         return patient.IdPatient;
+    }
+
+    private static void EnsurePatientExists(Patient? patient, int id)
+    {
+        if (patient == null)
+        {
+            throw new DomainException($"Patient with id {id} doesn't exist");
+        }
     }
 
     private static void EnsureMedicamentExists(Medicament? med, int id)
