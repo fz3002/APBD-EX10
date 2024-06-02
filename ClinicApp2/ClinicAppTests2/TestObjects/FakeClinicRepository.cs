@@ -45,35 +45,89 @@ public class FakeClinicRepository : IClinicRepository
         _prescriptionMedicaments = new List<PrescriptionMedicament>()
         {
             new PrescriptionMedicament
-                { IdMedicament = 1, IdPrescription = 1, Dose = 500, Details = "Take twice daily" },
+                { IdMedicament = 1, IdPrescription = 1, Dose = 500, Details = "Take twice daily", Medicament = new Medicament()
+                {
+                    IdMedicament = 1,
+                    Description = "sfasdf",
+                    Name = "fasdf",
+                    Type = "fasfas"
+                }},
             new PrescriptionMedicament
-                { IdMedicament = 2, IdPrescription = 1, Dose = 250, Details = "Take once daily" },
+                { IdMedicament = 2, IdPrescription = 1, Dose = 250, Details = "Take once daily", Medicament = new Medicament()
+                {
+                    IdMedicament = 2,
+                    Description = "sfasdf",
+                    Name = "fasdf",
+                    Type = "fasfas"
+                }},
             new PrescriptionMedicament
-                { IdMedicament = 3, IdPrescription = 2, Dose = 100, Details = "Take in the morning" },
+                { IdMedicament = 3, IdPrescription = 2, Dose = 100, Details = "Take in the morning", Medicament = new Medicament()
+                {
+                    IdMedicament = 3,
+                    Description = "sfasdf",
+                    Name = "fasdf",
+                    Type = "fasfas"
+                }},
             new PrescriptionMedicament
-                { IdMedicament = 1, IdPrescription = 3, Dose = 500, Details = "Take twice daily" },
-            new PrescriptionMedicament { IdMedicament = 2, IdPrescription = 4, Dose = 250, Details = "Take once daily" }
+                { IdMedicament = 1, IdPrescription = 3, Dose = 500, Details = "Take twice daily", Medicament = new Medicament()
+                {
+                    IdMedicament = 1,
+                    Description = "sfasdf",
+                    Name = "fasdf",
+                    Type = "fasfas"
+                }},
+            new PrescriptionMedicament { IdMedicament = 2, IdPrescription = 4, Dose = 250, Details = "Take once daily", Medicament = new Medicament()
+            {
+                IdMedicament = 2,
+                Description = "sfasdf",
+                Name = "fasdf",
+                Type = "fasfas"
+            }}
         };
     }
 
-    public Task<int> CreatePrescriptionAsync(int idDoctor, int idPatient, DateTime date, DateTime dateDue,
+    public async Task<int> CreatePrescriptionAsync(int idDoctor, int idPatient, DateTime date, DateTime dateDue,
         CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var p = new Prescription()
+        {
+            IdDoctor = idDoctor,
+            IdPatient = idPatient,
+            Date = DateOnly.FromDateTime(date),
+            DateDue = DateOnly.FromDateTime(dateDue)
+        };
+        int newId = _prescriptions.Max(p => p.IdPrescription) + 1;
+        _prescriptions.Add(p);
+
+        return await Task.FromResult(newId);
     }
 
-    public Task AddMedToPrescriptionAsync(PrescriptionMedicament prescriptionMedicament, CancellationToken cancellationToken)
+    public async Task AddMedToPrescriptionAsync(PrescriptionMedicament prescriptionMedicament, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        _prescriptionMedicaments.Add(prescriptionMedicament);
     }
 
-    public Task<ICollection<Prescription>> GetPatientsPrescriptionsAsync(int IdPatient, CancellationToken cancellationToken)
+    public async Task<ICollection<Prescription>> GetPatientsPrescriptionsAsync(int IdPatient, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var prescriptions = _prescriptions
+            .Where(p => p.IdPatient == IdPatient)
+            .Select(p => p)
+            .ToList();
+
+        return await Task.FromResult(prescriptions);
     }
 
-    public Task<ICollection<MedicamentResponseDTO>> GetMedicamentsForPrescriptionAsync(int IdPrescription, CancellationToken cancellationToken)
+    public async Task<ICollection<MedicamentResponseDTO>> GetMedicamentsForPrescriptionAsync(int IdPrescription, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var meds = _prescriptionMedicaments
+            .Where(mp => mp.IdPrescription == IdPrescription)
+            .Select(mp => new MedicamentResponseDTO(
+                mp.Medicament.IdMedicament,
+                mp.Medicament.Name,
+                mp.Dose,
+                mp.Medicament.Description
+            ))
+            .ToList();
+        return await Task.FromResult(meds);
     }
 }
