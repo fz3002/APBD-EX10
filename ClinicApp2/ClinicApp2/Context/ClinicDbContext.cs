@@ -1,7 +1,7 @@
-using ClinicApp.Models;
+using ClinicApp2.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace ClinicApp.Context;
+namespace ClinicApp2.Context;
 
 public partial class ClinicDbContext : DbContext
 {

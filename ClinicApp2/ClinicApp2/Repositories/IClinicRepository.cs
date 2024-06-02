@@ -1,7 +1,7 @@
-using ClinicApp.DTO;
-using ClinicApp.Models;
+using ClinicApp2.DTO;
+using ClinicApp2.Models;
 
-namespace ClinicApp.Repositories;
+namespace ClinicApp2.Repositories;
 
 public interface IClinicRepository : IRepository
 {

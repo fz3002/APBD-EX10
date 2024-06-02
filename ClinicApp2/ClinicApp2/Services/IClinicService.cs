@@ -1,7 +1,6 @@
-using ClinicApp.DTO;
-using Microsoft.AspNetCore.Mvc;
+using ClinicApp2.DTO;
 
-namespace ClinicApp.Services;
+namespace ClinicApp2.Services;
 
 public interface IClinicService
 {

@@ -1,8 +1,7 @@
-using ClinicApp.Context;
-using ClinicApp.Models;
+using ClinicApp2.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace ClinicApp.Repositories;
+namespace ClinicApp2.Repositories;
 
 public class PatientRepository : IPatientRepository
 {

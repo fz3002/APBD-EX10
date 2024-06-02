@@ -1,9 +1,9 @@
-using ClinicApp.DTO;
-using ClinicApp.Exceptions;
-using ClinicApp.Models;
-using ClinicApp.Repositories;
+using ClinicApp2.DTO;
+using ClinicApp2.Exceptions;
+using ClinicApp2.Models;
+using ClinicApp2.Repositories;
 
-namespace ClinicApp.Services;
+namespace ClinicApp2.Services;
 
 public class ClinicService : IClinicService
 {

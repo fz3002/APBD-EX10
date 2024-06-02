@@ -1,6 +1,6 @@
-using ClinicApp.Models;
+using ClinicApp2.Models;
 
-namespace ClinicApp.Repositories;
+namespace ClinicApp2.Repositories;
 
 public interface IDoctorRepository : IRepository
 {

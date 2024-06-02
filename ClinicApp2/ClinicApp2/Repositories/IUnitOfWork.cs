@@ -1,6 +1,6 @@
-using ClinicApp.Context;
+using ClinicApp2.Context;
 
-namespace ClinicApp.Repositories;
+namespace ClinicApp2.Repositories;
 
 public interface IUnitOfWork : IDisposable, IAsyncDisposable
 {

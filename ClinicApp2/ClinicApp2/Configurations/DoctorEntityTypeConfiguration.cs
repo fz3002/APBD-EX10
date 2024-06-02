@@ -1,8 +1,8 @@
-using ClinicApp.Models;
+using ClinicApp2.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ClinicApp.Configurations;
+namespace ClinicApp2.Configurations;
 
 public class DoctorEntityTypeConfiguration : IEntityTypeConfiguration<Doctor>
 {

@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ClinicApp.Models;
+namespace ClinicApp2.Models;
 
 public class PrescriptionMedicament
 {

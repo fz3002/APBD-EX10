@@ -1,9 +1,8 @@
-using ClinicApp.Context;
-using ClinicApp.DTO;
-using ClinicApp.Services;
+using ClinicApp2.DTO;
+using ClinicApp2.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ClinicApp.Controllers;
+namespace ClinicApp2.Controllers;
 
 [ApiController]
 [Route("api/clinic")]

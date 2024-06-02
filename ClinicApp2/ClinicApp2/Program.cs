@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
-using ClinicApp.Context;
-using ClinicApp.Repositories;
-using ClinicApp.Services;
+using ClinicApp2.Context;
+using ClinicApp2.Repositories;
+using ClinicApp2.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

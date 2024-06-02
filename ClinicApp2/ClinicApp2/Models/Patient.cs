@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-
-namespace ClinicApp.Models;
+namespace ClinicApp2.Models;
 
 public class Patient
 {

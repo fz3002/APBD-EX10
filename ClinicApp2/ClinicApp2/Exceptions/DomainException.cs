@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace ClinicApp.Exceptions;
+namespace ClinicApp2.Exceptions;
 
 public class DomainException : Exception
 {
