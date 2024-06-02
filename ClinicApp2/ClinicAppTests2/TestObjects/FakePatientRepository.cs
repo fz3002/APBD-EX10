@@ -21,17 +21,30 @@ public class FakePatientRepository : IPatientRepository
     public Task<Patient?> GetPatientAsync(int idPatient, string firstName, string lastName, DateTime birthdate,
         CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(_patients.FirstOrDefault(
+            p => p.IdPatient == idPatient &&
+                 p.FirstName == firstName &&
+                 p.LastName == lastName &&
+                 p.Birthdate == DateOnly.FromDateTime(birthdate)
+                 ));
     }
 
     public Task<Patient?> GetPatientAsync(int idPatient, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(_patients.FirstOrDefault(p => p.IdPatient == idPatient));
     }
 
     public Task<int> CreatePatientAsync(int idPatient, string firstName, string lastName, DateTime birthdate,
         CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        _patients.Add(new Patient()
+        {
+            IdPatient = idPatient,
+            FirstName = firstName,
+            LastName = lastName,
+            Birthdate = DateOnly.FromDateTime(birthdate)
+        });
+
+        return Task.FromResult(idPatient);
     }
 }

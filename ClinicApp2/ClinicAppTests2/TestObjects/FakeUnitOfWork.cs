@@ -7,21 +7,21 @@ public class FakeUnitOfWork : IUnitOfWork
 {
     public void Dispose()
     {
-        throw new NotImplementedException();
+
     }
 
     public ValueTask DisposeAsync()
     {
-        throw new NotImplementedException();
+        return ValueTask.CompletedTask;
     }
 
     public Task CommitAsync(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public ClinicDbContext GetDbContext()
     {
-        throw new NotImplementedException();
+        return null;
     }
 }
