@@ -17,6 +17,7 @@
 mono_crash.*
 
 */appsettings.json
+*/.idea
 
 # Build results
 [Dd]ebug/

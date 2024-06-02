@@ -38,8 +38,10 @@ public class ClinicService : IClinicService
         var patient = await _patientRepository.GetPatientAsync(prescriptionDot.Patient.IdPatient,
             prescriptionDot.Patient.FirstName, prescriptionDot.Patient.LastName, prescriptionDot.Patient.Birthdate, cancellationToken);
         var idPatient = await EnsurePatientExists(patient, prescriptionDot.Patient, cancellationToken);
+        await _unitOfWork.CommitAsync(cancellationToken);
         var idPrescription = await _clinicRepository.CreatePrescriptionAsync(prescriptionDot.IdDoctor, idPatient,
             prescriptionDot.Date, prescriptionDot.DateDue, cancellationToken);
+        await _unitOfWork.CommitAsync(cancellationToken);
         foreach (var med in medicaments)
         {
             var prescriptionMedicament = new PrescriptionMedicament
@@ -91,7 +93,7 @@ public class ClinicService : IClinicService
         }
     }
 
-    private static void EnsureDueDateGreaterThenDate(DateOnly date, DateOnly dateDue)
+    private static void EnsureDueDateGreaterThenDate(DateTime date, DateTime dateDue)
     {
         if (dateDue < date)
         {

@@ -13,25 +13,25 @@ public class PatientRepository : IPatientRepository
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Patient?> GetPatientAsync(int idPatient, string firstName, string lastName, DateOnly birthdate, CancellationToken cancellationToken)
+    public async Task<Patient?> GetPatientAsync(int idPatient, string firstName, string lastName, DateTime birthdate, CancellationToken cancellationToken)
     {
         var context = _unitOfWork.GetDbContext();
         return await context.Patients
             .Where(p =>
                 p.IdPatient == idPatient && p.FirstName == firstName && p.LastName == lastName &&
-                p.Birthdate == birthdate)
+                p.Birthdate == DateOnly.FromDateTime(birthdate))
             .Select(p => p)
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<int> CreatePatientAsync(int idPatient, string firstName, string lastName, DateOnly birthdate, CancellationToken cancellationToken)
+    public async Task<int> CreatePatientAsync(int idPatient, string firstName, string lastName, DateTime birthdate, CancellationToken cancellationToken)
     {
         var patient = new Patient
         {
             IdPatient = idPatient,
             FirstName = firstName,
             LastName = lastName,
-            Birthdate = birthdate
+            Birthdate = DateOnly.FromDateTime(birthdate)
         };
         await _unitOfWork.GetDbContext().Patients.AddAsync(patient, cancellationToken);
         return await GetLastPatientAsync(cancellationToken);

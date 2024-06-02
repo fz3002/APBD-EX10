@@ -13,12 +13,12 @@ public class ClinicRepository : IClinicRepository
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<int> CreatePrescriptionAsync(int idDoctor, int idPatient, DateOnly date, DateOnly dateDue, CancellationToken cancellationToken)
+    public async Task<int> CreatePrescriptionAsync(int idDoctor, int idPatient, DateTime date, DateTime dateDue, CancellationToken cancellationToken)
     {
         var prescription = new Prescription
         {
-            Date = date,
-            DateDue = dateDue,
+            Date = DateOnly.FromDateTime(date),
+            DateDue = DateOnly.FromDateTime(dateDue),
             IdDoctor = idDoctor,
             IdPatient = idPatient
         };
